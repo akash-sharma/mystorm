@@ -21,14 +21,12 @@ public class SimpleConsumerBolt extends BaseRichBolt {
 
   @Override
   public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-    LOGGER.info("SimpleConsumerBolt prepare logger");
-    System.out.println("SimpleConsumerBolt prepare sys out");
+    LOGGER.info("SimpleConsumerBolt prepare");
     this.collector = outputCollector;
   }
 
   @Override
   public void execute(Tuple tuple) {
-    LOGGER.info("tuple : {}", tuple);
     String requestId = UUID.randomUUID().toString();
     // TODO : add requestId to MDC
     LOGGER.info("requestId : {}, tuple : {}", requestId, tuple);

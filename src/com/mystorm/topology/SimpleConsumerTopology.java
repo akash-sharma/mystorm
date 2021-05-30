@@ -78,9 +78,8 @@ public class SimpleConsumerTopology {
     try {
       StormSubmitter.submitTopology(TOPOLOGY_NAME, conf, builder.createTopology());
       LOGGER.info(TOPOLOGY_NAME + " topology started logger");
-      System.out.println(TOPOLOGY_NAME + " topology started sys out");
     } catch (Exception e) {
-      System.out.println("Error in simple consumer topology : " + Utils.exceptionParser(e));
+      LOGGER.error("Error in simple consumer topology : " + Utils.exceptionParser(e));
     }
   }
 }
