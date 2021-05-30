@@ -5,7 +5,6 @@ import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
-import org.apache.storm.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,14 +27,18 @@ public class SimpleConsumerBolt extends BaseRichBolt {
   @Override
   public void execute(Tuple tuple) {
     String requestId = UUID.randomUUID().toString();
-    // TODO : add requestId to MDC
     LOGGER.info("requestId : {}, tuple : {}", requestId, tuple);
 
     String kafkaKey = tuple.getStringByField("key");
     String value = tuple.getStringByField("value");
-    LOGGER.info("kafkaKey : {}, value : {}", kafkaKey, value);
-    Utils.LOG.info("Util log, kafkaKey : {}, value : {}", kafkaKey, value);
-    System.out.println("sys out, kafkaKey : " + kafkaKey + ", value : " + value);
+    String partition = tuple.getStringByField("partition");
+    String offset = tuple.getStringByField("offset");
+    LOGGER.info(
+        "partition : {}, offset : {}, kafkaKey : {}, value : {}",
+        partition,
+        offset,
+        kafkaKey,
+        value);
 
     collector.ack(tuple);
   }
