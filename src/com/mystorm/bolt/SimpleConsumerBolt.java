@@ -28,6 +28,7 @@ public class SimpleConsumerBolt extends BaseRichBolt {
 
   @Override
   public void execute(Tuple tuple) {
+    LOGGER.info("tuple : {}", tuple);
     String requestId = UUID.randomUUID().toString();
     // TODO : add requestId to MDC
     LOGGER.info("requestId : {}, tuple : {}", requestId, tuple);

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class SimpleConsumerTopology {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleConsumerBolt.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleConsumerTopology.class);
 
   public static final String TOPOLOGY_NAME = "SIMPLE_CONSUMER_TOPOLOGY";
 
