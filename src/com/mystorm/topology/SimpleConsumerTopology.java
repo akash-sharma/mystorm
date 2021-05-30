@@ -10,66 +10,72 @@ import org.apache.storm.kafka.spout.KafkaSpout;
 import org.apache.storm.kafka.spout.KafkaSpoutConfig;
 import org.apache.storm.metric.LoggingMetricsConsumer;
 import org.apache.storm.topology.TopologyBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SimpleConsumerTopology {
 
-    public static final String TOPOLOGY_NAME = "SIMPLE_CONSUMER_TOPOLOGY";
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleConsumerBolt.class);
 
-    public static final String SPOUT_KAFKA_BROKER = "localhost:9092";
-    public static final String SPOUT_KAFKA_TOPIC = "SIMPLE_SPOUT_TOPIC";
-    public static final String SPOUT_KAFKA_CONSUMER_NAME = "SIMPLE_SPOUT_CONSUMER";
+  public static final String TOPOLOGY_NAME = "SIMPLE_CONSUMER_TOPOLOGY";
 
-    public static void main(String[] args) {
+  public static final String SPOUT_KAFKA_BROKER = "10.254.18.179:9092";
+  public static final String SPOUT_KAFKA_TOPIC = "simple_spout_topic";
+  public static final String SPOUT_KAFKA_CONSUMER_NAME = "SIMPLE_SPOUT_CONSUMER";
 
-        /*
-         * -----------------------------------------------------------------------------
-         * Kafka Spout consumer
-         * -----------------------------------------------------------------------------
-         */
-        KafkaSpoutConfig<String, String> kafkaSpoutConfig =
-                KafkaSpoutConfig.builder(SPOUT_KAFKA_BROKER, SPOUT_KAFKA_TOPIC)
-                        .setProp("group.id", SPOUT_KAFKA_CONSUMER_NAME)
-                        .setProp("key.deserializer", StringDeserializer.class)
-                        .setProp("value.deserializer", StringDeserializer.class)
-                        .setProcessingGuarantee(KafkaSpoutConfig.ProcessingGuarantee.AT_LEAST_ONCE)
-                        .setFirstPollOffsetStrategy(
-                                KafkaSpoutConfig.FirstPollOffsetStrategy.UNCOMMITTED_EARLIEST)
-                        .setMaxUncommittedOffsets(3)
-                        .setOffsetCommitPeriodMs(2000)
-                        .setProp(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 10000000)
-                        .build();
-        KafkaSpout<String, String> kafkaSpout = new KafkaSpout<>(kafkaSpoutConfig);
+  public static void main(String[] args) {
 
-        /*
-         * -----------------------------------------------------------------------------
-         * Building topology
-         * -----------------------------------------------------------------------------
-         */
-        TopologyBuilder builder = new TopologyBuilder();
+    /*
+     * -----------------------------------------------------------------------------
+     * Kafka Spout consumer
+     * -----------------------------------------------------------------------------
+     */
+    KafkaSpoutConfig<String, String> kafkaSpoutConfig =
+        KafkaSpoutConfig.builder(SPOUT_KAFKA_BROKER, SPOUT_KAFKA_TOPIC)
+            .setProp("group.id", SPOUT_KAFKA_CONSUMER_NAME)
+            .setProp("key.deserializer", StringDeserializer.class)
+            .setProp("value.deserializer", StringDeserializer.class)
+            .setProcessingGuarantee(KafkaSpoutConfig.ProcessingGuarantee.AT_LEAST_ONCE)
+            .setFirstPollOffsetStrategy(
+                KafkaSpoutConfig.FirstPollOffsetStrategy.UNCOMMITTED_EARLIEST)
+            .setMaxUncommittedOffsets(1)
+            .setOffsetCommitPeriodMs(2000)
+            .setProp(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 10000000)
+            .build();
+    KafkaSpout<String, String> kafkaSpout = new KafkaSpout<>(kafkaSpoutConfig);
 
-        builder.setSpout("SIMPLE_CONSUMER_SPOUT_ID", kafkaSpout, 1);
+    /*
+     * -----------------------------------------------------------------------------
+     * Building topology
+     * -----------------------------------------------------------------------------
+     */
+    TopologyBuilder builder = new TopologyBuilder();
 
-        builder.setBolt("SIMPLE_CONSUMER_BOLT_ID", new SimpleConsumerBolt(), 1);
+    builder.setSpout("SIMPLE_CONSUMER_SPOUT_ID", kafkaSpout, 1);
 
-        /*
-         * -----------------------------------------------------------------------------
-         * Topology level configs
-         * -----------------------------------------------------------------------------
-         */
-        Config conf = new Config();
-        conf.setNumWorkers(1);
-        conf.setMessageTimeoutSecs(10);
-        conf.registerMetricsConsumer(LoggingMetricsConsumer.class);
+    builder.setBolt("SIMPLE_CONSUMER_BOLT_ID", new SimpleConsumerBolt(), 1);
 
-        /*
-         * -----------------------------------------------------------------------------
-         * Topology submit command
-         * -----------------------------------------------------------------------------
-         */
-        try {
-            StormSubmitter.submitTopology(TOPOLOGY_NAME, conf, builder.createTopology());
-        } catch (Exception e) {
-            System.out.println("Error in simple consumer topology : " + Utils.exceptionParser(e));
-        }
+    /*
+     * -----------------------------------------------------------------------------
+     * Topology level configs
+     * -----------------------------------------------------------------------------
+     */
+    Config conf = new Config();
+    conf.setNumWorkers(1);
+    conf.setMessageTimeoutSecs(10);
+    conf.registerMetricsConsumer(LoggingMetricsConsumer.class);
+
+    /*
+     * -----------------------------------------------------------------------------
+     * Topology submit command
+     * -----------------------------------------------------------------------------
+     */
+    try {
+      StormSubmitter.submitTopology(TOPOLOGY_NAME, conf, builder.createTopology());
+      LOGGER.info(TOPOLOGY_NAME + " topology started logger");
+      System.out.println(TOPOLOGY_NAME + " topology started sys out");
+    } catch (Exception e) {
+      System.out.println("Error in simple consumer topology : " + Utils.exceptionParser(e));
     }
+  }
 }
