@@ -19,8 +19,8 @@ public class SimpleConsumerTopology {
 
   public static final String TOPOLOGY_NAME = "SIMPLE_CONSUMER_TOPOLOGY";
 
-  public static final String SPOUT_KAFKA_BROKER = "10.254.18.179:9092";
-  public static final String SPOUT_KAFKA_TOPIC = "simple_spout_topic_new";
+  public static final String SPOUT_KAFKA_BROKER = "localhost:9092";
+  public static final String SPOUT_KAFKA_TOPIC = "simple_spout_topic_name";
   public static final String SPOUT_KAFKA_CONSUMER_NAME = "SIMPLE_SPOUT_CONSUMER";
 
   public static final String SIMPLE_CONSUMER_SPOUT_ID = "SIMPLE_CONSUMER_SPOUT_ID";
