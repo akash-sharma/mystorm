@@ -25,7 +25,7 @@ Shuffle Grouping randomly distributed tuples across the bolts, If topology is ru
 => Spout/Bolts task count :
     An Important strategy to make topology balanced and proper utilized. Spout/Bolt task count must be in proportion with number of workers. we should keeps these number in such way that load is distributed and balanced.
 
-    for example: If we are running topology which is having 2 workers and 1 spout then only 1 worker is having that spout which means one worker is getting all packets, parallalization is not achieved in this case and workers are also not balanced so better spout task count 2 which means each worker is having 1 spout and it will be balanced.
+If we are running topology which is having 2 workers and 1 spout then only 1 worker is having that spout which means one worker is getting all packets, parallalization is not achieved in this case and workers are also not balanced so better spout task count 2 which means each worker is having 1 spout and it will be balanced.
     
 
 => Wait Strategy :
