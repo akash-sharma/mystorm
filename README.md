@@ -36,6 +36,7 @@ If we are running topology which is having 2 workers and 1 spout then only 1 wor
 
 
 Good articles with problems : 
+
 http://mail-archives.apache.org/mod_mbox/storm-user/201804.mbox/%3CMMXP123MB11171DAF227A8567A18D862FA4B00@MMXP123MB1117.GBRP123.PROD.OUTLOOK.COM%3E
 
 https://www.programmersought.com/article/43831135194/
