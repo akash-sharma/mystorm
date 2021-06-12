@@ -1,11 +1,17 @@
 # mystorm
 This is my new project on apache storm
 
-// how to run storm topology
+// build jar
+mvn clean install
 
+// deploy storm topology jar
 storm jar <jar_file_name> com.mystorm.topology.SimpleConsumerTopology
 
+// kill topology
+storm kill SIMPLE_CONSUMER_TOPOLOGY -w 50
 
+
+### Important Notes
 
 => Grouping Criteria :
 Shuffle Grouping - Tuples are randomly distributed across the bolt's tasks in a way such that each bolt is guaranteed to get an equal number of tuples.
