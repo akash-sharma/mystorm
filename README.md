@@ -52,3 +52,9 @@ https://storm.apache.org/releases/current/Concepts.html
 https://storm.apache.org/releases/current/Performance.html
 
 http://storm.apache.org/releases/current/Guaranteeing-message-processing.html
+
+
+### How to write Storm UTs
+
+https://stackoverflow.com/questions/16549265/testing-storm-bolts-and-spouts
+
