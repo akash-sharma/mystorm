@@ -2,12 +2,15 @@
 This is my new project on apache storm
 
 // build jar
+
 mvn clean install
 
 // deploy storm topology jar
+
 storm jar <jar_file_name> com.mystorm.topology.SimpleConsumerTopology
 
 // kill topology
+
 storm kill SIMPLE_CONSUMER_TOPOLOGY -w 50
 
 
