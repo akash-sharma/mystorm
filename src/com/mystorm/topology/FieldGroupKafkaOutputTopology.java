@@ -21,6 +21,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
+/*
+ * -----------------------------------------------------------------------------
+ * Topology with field grouping example and kafka output bolt example
+ * -----------------------------------------------------------------------------
+ */
 public class FieldGroupKafkaOutputTopology {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(FieldGroupKafkaOutputTopology.class);
