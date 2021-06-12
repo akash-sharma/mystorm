@@ -36,7 +36,7 @@ If we are running topology which is having 2 workers and 1 spout then only 1 wor
 
 => offsets.retention.minutes : Offsets older than this retention period will be discarded
 
-Good articles with problems : 
+### Good articles with problems : 
 
 http://mail-archives.apache.org/mod_mbox/storm-user/201804.mbox/%3CMMXP123MB11171DAF227A8567A18D862FA4B00@MMXP123MB1117.GBRP123.PROD.OUTLOOK.COM%3E
 
@@ -45,7 +45,7 @@ https://www.programmersought.com/article/43831135194/
 https://dev.storm.apache.narkive.com/jBE2Jk6V/jira-created-storm-1017-if-ignorezkoffsets-set-true-kafkaspout-will-reset-zk-offset-when-recover
 
 
-Doc links :
+### Doc links :
 
 https://storm.apache.org/releases/current/Concepts.html
 
