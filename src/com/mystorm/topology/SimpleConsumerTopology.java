@@ -66,8 +66,8 @@ public class SimpleConsumerTopology {
      * -----------------------------------------------------------------------------
      */
     Config conf = new Config();
-    conf.setNumWorkers(1);
-    conf.setMessageTimeoutSecs(10);
+    conf.setNumWorkers(1);            // default value
+    conf.setMessageTimeoutSecs(60);   // default value
     conf.registerMetricsConsumer(LoggingMetricsConsumer.class);
 
     /*
