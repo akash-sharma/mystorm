@@ -78,3 +78,29 @@ http://storm.apache.org/releases/current/Guaranteeing-message-processing.html
 
 https://stackoverflow.com/questions/16549265/testing-storm-bolts-and-spouts
 
+
+### How to debug and remove lag in kafka storm topology
+
+(1) Check packet data for topic, partition and offset
+
+KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server <broker_ip>:9092 --topic <topic_name> --max-messages 1  --partition <parition> --offset <offset>
+
+
+(2) Describe consumer group to check stuck packet in kafka topic
+
+KAFKA_HOME/bin/kafka-consumer-groups.sh --bootstrap-server <broker_ip>:9092 --group <consumer_group> --describe
+
+
+(3) Reset offset dry run
+
+KAFKA_HOME/bin/kafka-consumer-groups.sh --bootstrap-server <broker_ip>:9092 --group <consumer_group> --topic <topic_name>:<partition> --reset-offsets --to-offset  <new_offset_number>  --dry-run
+
+
+(4) Reset offset execute
+
+KAFKA_HOME/bin/kafka-consumer-groups.sh --bootstrap-server <broker_ip>:9092 --group <consumer_group> --topic <topic_name>:<partition> --reset-offsets --to-offset  <new_offset_number>  --execute
+
+
+(5) Execute step 2 command to verify
+
+(6) Restart topology
