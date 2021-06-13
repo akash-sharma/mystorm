@@ -2,7 +2,7 @@ package com.mystorm.topology;
 
 import com.mystorm.bolt.FgkoFieldProcessorBolt;
 import com.mystorm.bolt.FgkoPartitionerBolt;
-import com.mystorm.streams.StreamConstant;
+import com.mystorm.enums.StreamConstant;
 import com.mystorm.utils.Utils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

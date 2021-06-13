@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mystorm.dto.FieldGroupDto;
 import com.mystorm.service.FieldGroupService;
-import com.mystorm.streams.StreamConstant;
+import com.mystorm.enums.StreamConstant;
 import com.mystorm.utils.Utils;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;

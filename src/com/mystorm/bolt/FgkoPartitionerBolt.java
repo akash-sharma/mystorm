@@ -2,7 +2,7 @@ package com.mystorm.bolt;
 
 import com.mystorm.dto.FieldGroupDto;
 import com.mystorm.service.FieldGroupService;
-import com.mystorm.streams.StreamConstant;
+import com.mystorm.enums.StreamConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
