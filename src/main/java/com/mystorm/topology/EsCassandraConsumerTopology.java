@@ -3,13 +3,13 @@ package com.mystorm.topology;
 import com.mystorm.bolt.EccProcessorBolt;
 import com.mystorm.bolt.ElasticSearchBolt;
 import com.mystorm.enums.StreamConstant;
+import com.mystorm.handler.CustomExecutionResultHandler;
 import com.mystorm.property.PropertiesReader;
 import com.mystorm.utils.Utils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.storm.Config;
 import org.apache.storm.StormSubmitter;
-import org.apache.storm.cassandra.BaseExecutionResultHandler;
 import org.apache.storm.cassandra.DynamicStatementBuilder;
 import org.apache.storm.cassandra.bolt.BaseCassandraBolt;
 import org.apache.storm.cassandra.bolt.CassandraWriterBolt;
@@ -76,37 +76,7 @@ public class EsCassandraConsumerTopology {
 
     ElasticSearchBolt elasticSearchBolt = new ElasticSearchBolt(ES_HOSTS, ES_INDEX_NAME);
 
-    /*
-     * -----------------------------------------------------------------------------
-     * Writer Bolt for Cassandra
-     * -----------------------------------------------------------------------------
-     */
-
-    PropertiesReader propertiesReader = new PropertiesReader();
-    Map cassandraConfig = propertiesReader.readProperties("cassandra.properties");
-
-    List<String> attributes = Arrays.asList("id", "user_id", "tnx_id");
-
-    String queryString =
-        "INSERT INTO ec_cas (" + StringUtils.join(attributes, ",") + ") values (?,?,?);";
-    List<FieldSelector> selectors = new ArrayList<>();
-
-    for (String colName : attributes) {
-      selectors.add(new FieldSelector(colName));
-    }
-
-    CqlMapper.SelectableCqlMapper cqlMapper = new CqlMapper.SelectableCqlMapper(selectors);
-
-    List<String> codeDecisionMakerAttributes = Arrays.asList("id", "user_id", "tnx_id");
-
-    BaseCassandraBolt cassandraWriterBolt =
-        new CassandraWriterBolt(
-                DynamicStatementBuilder.async(
-                    DynamicStatementBuilder.simpleQuery(queryString).with(cqlMapper)))
-            .withCassandraConfig(cassandraConfig)
-            .withResultHandler(new BaseExecutionResultHandler())
-            .withStreamOutputFields(
-                StreamConstant.ECC_COMMON_STREAM.name(), new Fields(codeDecisionMakerAttributes));
+    BaseCassandraBolt cassandraBolt = getBaseCassandraBolt();
 
     /*
      * -----------------------------------------------------------------------------
@@ -128,9 +98,9 @@ public class EsCassandraConsumerTopology {
             1)
         .localOrShuffleGrouping(ECC_PROCESSOR_BOLT_ID, StreamConstant.ECC_COMMON_STREAM.name());
 
-    /*builder
-    .setBolt(ECC_CASSANDRA_BOLT_ID, null,1)
-    .localOrShuffleGrouping(ECC_PROCESSOR_BOLT_ID, StreamConstant.ECC_COMMON_STREAM.name());*/
+    builder
+        .setBolt(ECC_CASSANDRA_BOLT_ID, cassandraBolt, 1)
+        .localOrShuffleGrouping(ECC_PROCESSOR_BOLT_ID, StreamConstant.ECC_COMMON_STREAM.name());
 
     /*
      * -----------------------------------------------------------------------------
@@ -153,5 +123,38 @@ public class EsCassandraConsumerTopology {
     } catch (Exception e) {
       LOGGER.error("Error in simple consumer topology : {}", Utils.exceptionParser(e));
     }
+  }
+
+  /*
+   * -----------------------------------------------------------------------------
+   * Writer Bolt for Cassandra
+   * -----------------------------------------------------------------------------
+   */
+  private static BaseCassandraBolt getBaseCassandraBolt() {
+
+    PropertiesReader propertiesReader = new PropertiesReader();
+    Map cassandraConfig = propertiesReader.readProperties("cassandra.properties");
+    List<String> attributes = Arrays.asList("id", "user_id", "tnx_id");
+    String queryString =
+        "INSERT INTO ECC.ecc_table (" + StringUtils.join(attributes, ",") + ") values (?,?,?);";
+    List<FieldSelector> selectors = new ArrayList<>();
+
+    for (String colName : attributes) {
+      selectors.add(new FieldSelector(colName));
+    }
+
+    CqlMapper.SelectableCqlMapper cqlMapper = new CqlMapper.SelectableCqlMapper(selectors);
+    List<String> codeDecisionMakerAttributes = Arrays.asList("id", "user_id", "tnx_id");
+
+    BaseCassandraBolt cassandraWriterBolt =
+        new CassandraWriterBolt(
+                DynamicStatementBuilder.async(
+                    DynamicStatementBuilder.simpleQuery(queryString).with(cqlMapper)))
+            .withCassandraConfig(cassandraConfig)
+            .withResultHandler(new CustomExecutionResultHandler())
+            .withStreamOutputFields(
+                StreamConstant.ECC_COMMON_STREAM.name(), new Fields(codeDecisionMakerAttributes));
+
+    return cassandraWriterBolt;
   }
 }
