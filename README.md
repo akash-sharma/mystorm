@@ -14,7 +14,7 @@ storm jar <jar_file_name> com.mystorm.topology.SimpleConsumerTopology
 storm kill SIMPLE_CONSUMER_TOPOLOGY -w 50
 
 
-### Written two storm topologies : 
+### Written three storm topologies : 
 
 (1) SimpleConsumerTopology.java
 
@@ -23,6 +23,10 @@ This is simple topology having 1 kafka spout and 1 kafka bolt
 (2) FieldGroupKafkaOutputTopology.java
 
 This is a topology in which I have taken field grouping for a particular type of key (customerId) in kafka packet, and then pushing processed output to another kafka topic.
+
+(3) EsCassandraConsumerTopology.java
+
+This topology covers an example of consuming a kafka packet and then saving it to elastic search and cassandra.
 
 
 ### Important Notes
