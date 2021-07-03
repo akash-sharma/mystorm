@@ -61,6 +61,7 @@ public class FieldGroupKafkaOutputTopology {
                 KafkaSpoutConfig.FirstPollOffsetStrategy.UNCOMMITTED_EARLIEST)
             .setMaxUncommittedOffsets(1)
             .setOffsetCommitPeriodMs(2000)
+            .setProp(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 20)
             .setProp(ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG, 10000000)
             .build();
     KafkaSpout<String, String> kafkaSpout = new KafkaSpout<>(kafkaSpoutConfig);
